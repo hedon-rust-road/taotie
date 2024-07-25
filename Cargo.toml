@@ -8,5 +8,6 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.86"
 arrow = "52.1.0"
+arrow-cast = { version = "52.1.0", features = ["prettyprint"] }
 parquet = { version = "52.1.0", features = ["json", "serde"] }
 serde = { version = "1.0.204", features = ["derive"] }
