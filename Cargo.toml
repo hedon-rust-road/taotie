@@ -7,7 +7,9 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.86"
-arrow = "52.1.0"
+arrow = { version = "52.1.0", features = ["test_utils"] }
 arrow-cast = { version = "52.1.0", features = ["prettyprint"] }
-parquet = { version = "52.1.0", features = ["json", "serde"] }
+futures = "0.3.30"
+parquet = { version = "52.1.0", features = ["json", "serde", "arrow", "arrow-cast", "tokio", "async"] }
 serde = { version = "1.0.204", features = ["derive"] }
+tokio = { version = "1.39.1", features = ["full"] }
