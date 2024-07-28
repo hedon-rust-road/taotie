@@ -9,7 +9,9 @@ edition = "2021"
 anyhow = "1.0.86"
 arrow = { version = "52.1.0", features = ["test_utils"] }
 arrow-cast = { version = "52.1.0", features = ["prettyprint"] }
+clap = { version = "4.5.11", features = ["derive"] }
 futures = "0.3.30"
 parquet = { version = "52.1.0", features = ["json", "serde", "arrow", "arrow-cast", "tokio", "async"] }
+reedline-repl-rs = { version = "1.1.1", features = ["derive"] }
 serde = { version = "1.0.204", features = ["derive"] }
 tokio = { version = "1.39.1", features = ["full"] }
