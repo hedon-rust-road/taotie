@@ -16,6 +16,10 @@ pub type ReplCallbacks = CallBackMap<ReplContext, reedline_repl_rs::Error>;
 pub fn get_callbacks() -> ReplCallbacks {
     let mut callbacks = CallBackMap::new();
     callbacks.insert("connect".to_string(), cli::connect);
+    callbacks.insert("list".to_string(), cli::list);
+    callbacks.insert("describe".to_string(), cli::describe);
+    callbacks.insert("head".to_string(), cli::head);
+    callbacks.insert("sql".to_string(), cli::sql);
     callbacks
 }
 
