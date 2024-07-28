@@ -1,8 +1,8 @@
 use clap::{ArgMatches, Parser};
 
-use crate::ReplContext;
+use crate::{CmdExector, ReplContext, ReplDisplay, ReplMsg};
 
-use super::{ReplCommand, ReplResult};
+use super::ReplResult;
 
 #[derive(Debug, Parser)]
 pub struct HeadOpts {
@@ -20,19 +20,19 @@ pub fn head(args: ArgMatches, ctx: &mut ReplContext) -> ReplResult {
 
     let n = args.get_one::<usize>("n").copied();
 
-    let cmd = HeadOpts::new(name, n).into();
-    ctx.send(cmd);
-    Ok(None)
-}
-
-impl From<HeadOpts> for ReplCommand {
-    fn from(value: HeadOpts) -> Self {
-        ReplCommand::Head(value)
-    }
+    let (msg, rx) = ReplMsg::new(HeadOpts::new(name, n));
+    Ok(ctx.send(msg, rx))
 }
 
 impl HeadOpts {
     pub fn new(name: String, n: Option<usize>) -> Self {
         Self { name, n }
+    }
+}
+
+impl CmdExector for HeadOpts {
+    async fn execute<T: crate::Backend>(self, backend: &mut T) -> anyhow::Result<String> {
+        let df = backend.head(&self.name, self.n.unwrap_or(5)).await?;
+        df.display().await
     }
 }

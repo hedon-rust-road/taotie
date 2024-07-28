@@ -1,8 +1,8 @@
 use clap::{ArgMatches, Parser};
 
-use crate::ReplContext;
+use crate::{CmdExector, ReplContext, ReplDisplay, ReplMsg};
 
-use super::{ReplCommand, ReplResult};
+use super::ReplResult;
 
 #[derive(Debug, Parser)]
 pub struct SqlOpts {
@@ -16,20 +16,19 @@ pub fn sql(args: ArgMatches, ctx: &mut ReplContext) -> ReplResult {
         .expect("expect sql query")
         .to_string();
 
-    let cmd = SqlOpts::new(query).into();
-    ctx.send(cmd);
-
-    Ok(None)
-}
-
-impl From<SqlOpts> for ReplCommand {
-    fn from(value: SqlOpts) -> Self {
-        ReplCommand::Sql(value)
-    }
+    let (msg, rx) = ReplMsg::new(SqlOpts::new(query));
+    Ok(ctx.send(msg, rx))
 }
 
 impl SqlOpts {
     pub fn new(query: String) -> Self {
         Self { query }
+    }
+}
+
+impl CmdExector for SqlOpts {
+    async fn execute<T: crate::Backend>(self, backend: &mut T) -> anyhow::Result<String> {
+        let df = backend.sql(&self.query).await?;
+        df.display().await
     }
 }
