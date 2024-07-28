@@ -10,8 +10,23 @@ anyhow = "1.0.86"
 arrow = { version = "52.1.0", features = ["test_utils"] }
 arrow-cast = { version = "52.1.0", features = ["prettyprint"] }
 clap = { version = "4.5.11", features = ["derive"] }
+crossbeam-channel = "0.5.13"
+dirs = "5.0.1"
 futures = "0.3.30"
-parquet = { version = "52.1.0", features = ["json", "serde", "arrow", "arrow-cast", "tokio", "async"] }
+parquet = { version = "52.1.0", features = [
+    "json",
+    "serde",
+    "arrow",
+    "arrow-cast",
+    "tokio",
+    "async",
+] }
+polars = { version = "0.41.3", features = [
+    "parquet",
+    "timezones",
+    "sql",
+    "lazy",
+] }
 reedline-repl-rs = { version = "1.1.1", features = ["derive"] }
 serde = { version = "1.0.204", features = ["derive"] }
 tokio = { version = "1.39.1", features = ["full"] }
