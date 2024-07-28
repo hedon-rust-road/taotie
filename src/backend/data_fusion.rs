@@ -59,6 +59,7 @@ impl Backend for DataFusionBackend {
     }
     async fn describe(&self, name: &str) -> anyhow::Result<Self::DataFrame> {
         let df = self.0.sql(&format!("SELECT * FROM {}", name)).await?;
+        let df = df.describe().await?;
         Ok(df)
     }
     async fn head(&self, name: &str, size: usize) -> anyhow::Result<Self::DataFrame> {
