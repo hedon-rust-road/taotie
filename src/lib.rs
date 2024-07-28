@@ -84,13 +84,8 @@ impl ReplContext {
             eprintln!("Failed to send command: {}", e);
             std::process::exit(1);
         }
-        match rx.recv() {
-            Ok(data) => Some(data),
-            Err(e) => {
-                eprintln!("Failed to receive data: {}", e);
-                None
-            }
-        }
+
+        rx.recv().ok()
     }
 }
 
