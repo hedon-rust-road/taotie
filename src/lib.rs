@@ -78,9 +78,9 @@ impl ReplContext {
         Self { tx }
     }
 
-    pub fn send(&self, cmd: ReplMsg, rx: oneshot::Receiver<String>) -> Option<String> {
-        if let Err(e) = self.tx.send(cmd) {
-            eprintln!("Failed to send command: {}", e);
+    pub fn send(&self, msg: ReplMsg, rx: oneshot::Receiver<String>) -> Option<String> {
+        if let Err(e) = self.tx.send(msg) {
+            eprintln!("Failed to send repl msg: {}", e);
             std::process::exit(1);
         }
 
