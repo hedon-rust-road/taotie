@@ -17,7 +17,6 @@ impl DataFusionBackend {
 }
 
 impl Backend for DataFusionBackend {
-    type DataFrame = datafusion::dataframe::DataFrame;
     async fn connect(&mut self, opts: &crate::cli::ConnectOpts) -> anyhow::Result<()> {
         match &opts.conn {
             DatasetConn::Postgres(_conn_str) => {
@@ -48,21 +47,21 @@ impl Backend for DataFusionBackend {
         }
         Ok(())
     }
-    async fn list(&self) -> anyhow::Result<Self::DataFrame> {
+    async fn list(&self) -> anyhow::Result<impl ReplDisplay> {
         let sql = "SELECT table_name, table_type FROM information_schema.tables WHERE table_schema = 'public'";
         let df = self.0.sql(sql).await?;
         Ok(df)
     }
-    async fn schema(&self, name: &str) -> anyhow::Result<Self::DataFrame> {
+    async fn schema(&self, name: &str) -> anyhow::Result<impl ReplDisplay> {
         let df = self.0.sql(&format!("DESCRIBE {}", name)).await?;
         Ok(df)
     }
-    async fn describe(&self, name: &str) -> anyhow::Result<Self::DataFrame> {
+    async fn describe(&self, name: &str) -> anyhow::Result<impl ReplDisplay> {
         let df = self.0.sql(&format!("SELECT * FROM {}", name)).await?;
         let df = df.describe().await?;
         Ok(df)
     }
-    async fn head(&self, name: &str, size: usize) -> anyhow::Result<Self::DataFrame> {
+    async fn head(&self, name: &str, size: usize) -> anyhow::Result<impl ReplDisplay> {
         let df = self
             .0
             .sql(&format!("SELECT * FROM {} LIMIT {}", name, size))
@@ -70,7 +69,7 @@ impl Backend for DataFusionBackend {
         Ok(df)
     }
 
-    async fn sql(&self, sql: &str) -> anyhow::Result<Self::DataFrame> {
+    async fn sql(&self, sql: &str) -> anyhow::Result<impl ReplDisplay> {
         // Why can not here use self.sql?
         // recursion in an async fn requires boxing a recursive `async fn` call must introduce indirection such as `Box::pin` to avoid an infinitely sized future
         /*
