@@ -3352,6 +3352,8 @@ dependencies = [
  "clap",
  "crossbeam-channel",
  "datafusion",
+ "datafusion-expr",
+ "datafusion-functions-aggregate",
  "dirs",
  "enum_dispatch",
  "futures",
