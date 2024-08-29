@@ -1,5 +1,5 @@
 use reedline_repl_rs::Repl;
-use template::{get_callbacks, ReplCommand, ReplContext};
+use taotie::{get_callbacks, ReplCommand, ReplContext};
 
 const HISTORY_SIZE: usize = 1024;
 
